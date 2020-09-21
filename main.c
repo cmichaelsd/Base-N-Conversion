@@ -2,24 +2,31 @@
 #include <stdio.h>
 
 void reverse_char_array(char arr[], int length);
-void hex_to_decimal(char arr[], int length);
-void decimal_to_hex(int decimal);
-int hex_char_to_int(char c);
+void to_decimal(int base, char arr[], int length);
+void decimal_to_base_n(int base, int decimal);
+int char_to_int(char c);
 
 int main() {
-    stack hex;
+    stack base_sixteen;
     int decimal = 61453;
-    decimal_to_hex(decimal);
+    int base = 8;
+
+    if (base > 16) {
+        printf("Base can not be greater than sixteen for this program");
+        return 0;
+    }
+    
+    decimal_to_base_n(base, decimal);
     printf("\n");
 
-    init_stack(&hex, "F00D");
+    init_stack(&base_sixteen, "F00D");
 
-    hex_to_decimal(hex.stack, stack_length(&hex));
+    to_decimal(base, base_sixteen.stack, stack_length(&base_sixteen));
 
     return 0;
 }
 
-int hex_char_to_int(char c) {
+int char_to_int(char c) {
     switch (c) {
         case 'A':
             return 10;
@@ -38,16 +45,14 @@ int hex_char_to_int(char c) {
     }
 }
 
-void hex_to_decimal(char arr[], int length) {
+void to_decimal(int base, char arr[], int length) {
     int sum = 0;
 
     int i;
-    int pow = 1;
-    int factor = 16;
-    for (i = length - 1; i >= 0; --i) {
-        int decimal = hex_char_to_int(arr[i]);
+    int pow;
+    for (i = length - 1, pow = 1; i >= 0; --i, pow *= base) {
+        int decimal = char_to_int(arr[i]);
         sum += pow * decimal;
-        pow *= factor;
     }
 
     /* 
@@ -59,9 +64,9 @@ void hex_to_decimal(char arr[], int length) {
     printf("%d", sum);
 }
 
-void decimal_to_hex(int decimal) {
-    stack hex;
-    char hex_set[16] = {
+void decimal_to_base_n(int base, int decimal) {
+    stack base_n_stack;
+    char char_set[16] = {
         '0',
         '1',
         '2',
@@ -82,15 +87,15 @@ void decimal_to_hex(int decimal) {
 
     int i;
     for (i = 0; decimal != 0; ++i) {
-        int remainder = decimal % 16;
-        decimal = decimal / 16;
-        hex.stack[i] = hex_set[remainder];
+        int remainder = decimal % base;
+        decimal = decimal / base;
+        base_n_stack.stack[i] = char_set[remainder];
     }
 
-    hex.stack[i+1] = 0;
+    base_n_stack.stack[i+1] = 0;
 
-    reverse_char_array(hex.stack, stack_length(&hex));
-    print_stack(&hex);
+    reverse_char_array(base_n_stack.stack, stack_length(&base_n_stack));
+    print_stack(&base_n_stack);
 }
 
 void reverse_char_array(char arr[], int length) {
