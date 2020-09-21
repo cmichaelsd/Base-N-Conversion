@@ -7,7 +7,7 @@ void decimal_to_base_n(int base, int decimal);
 int char_to_int(char c);
 
 int main() {
-    stack base_sixteen;
+    stack base_n;
     int decimal = 61453;
     int base = 8;
 
@@ -19,9 +19,9 @@ int main() {
     decimal_to_base_n(base, decimal);
     printf("\n");
 
-    init_stack(&base_sixteen, "F00D");
+    init_stack(&base_n, "F00D");
 
-    to_decimal(base, base_sixteen.stack, stack_length(&base_sixteen));
+    to_decimal(base, base_n.stack, stack_length(&base_n));
 
     return 0;
 }
