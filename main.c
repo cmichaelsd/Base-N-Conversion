@@ -3,27 +3,47 @@
 #include <ctype.h>
 
 void reverse_char_array(char arr[], int length);
-void to_decimal(int base, char arr[], int length);
-void decimal_to_base_n(int base, int decimal);
+void from_base_n(int base, char arr[], int length);
+void to_base_n(int base, int decimal);
 int char_to_int(char c);
 char int_to_char(int n);
 
 int main() {
     stack base_n;
-    int decimal = 61453;
-    int base = 16;
+    int trigger;
+    int number;
+    char base_n_string[36];
+    int base;
+
+    printf("Convert decimal to a new base (1).\n");
+    printf("Convert a non-decimal number to a decimal (0).\n");
+    scanf("%d", &trigger);
+
+    if (trigger) {
+        printf("Enter your decimal number.\n");
+        scanf("%d", &number);
+        printf("What base would you like to convert to?\n");
+    } else {
+        printf("Enter your non-decimal number.\n");
+        scanf("%s", base_n_string);
+        printf("What base are you converting from?\n");
+    }
+
+    printf("Enter a base less than base36.\n");
+    scanf("%d", &base);
 
     if (base > 36) {
-        printf("Base can not be greater than sixteen for this program");
+        printf("Base is larger than 36.\n");
         return 0;
     }
-    
-    decimal_to_base_n(base, decimal);
-    printf("\n");
 
-    init_stack(&base_n, "F00D");
-    to_decimal(base, base_n.stack, stack_length(&base_n));
-    
+    if (trigger) {
+        to_base_n(base, number);
+    } else {
+        init_stack(&base_n, base_n_string);
+        from_base_n(base, base_n.stack, stack_length(&base_n));
+    }
+
     return 0;
 }
 
@@ -35,24 +55,20 @@ char int_to_char(int n) {
 }
 
 int char_to_int(char c) {
-    const int alpha = isalpha(c) > 0;
-    /* evaluate this (boolean) 1 or 0 */
-    switch (alpha) {
-        case 1:
-            return c - 55;
-        default:
-            return c - '0';
+    if (isalpha(c) > 0) {
+        return c - 55;
     }
+    return c - '0';
 }
 
-void to_decimal(int base, char arr[], int length) {
+void from_base_n(int base, char arr[], int length) {
     int sum = 0;
 
     int i;
     int pow;
     for (i = length - 1, pow = 1; i >= 0; --i, pow *= base) {
-        int decimal = char_to_int(arr[i]);
-        sum += pow * decimal;
+        int n = char_to_int(arr[i]);
+        sum += pow * n;
     }
 
     /* 
@@ -64,7 +80,7 @@ void to_decimal(int base, char arr[], int length) {
     printf("%d", sum);
 }
 
-void decimal_to_base_n(int base, int decimal) {
+void to_base_n(int base, int decimal) {
     stack base_n_stack;
 
     int i;
