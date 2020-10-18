@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <ctype.h>
 
+/* 
+h0 = D -> 13, h1 = 0 -> 0, h2 = 0 -> 0, h3 = F -> 15
+16^0 * 13,    16^1 * 0,    16^2 * 0     16^3 * 15
+multiply hex decimal equivilant by its position from the right
+collect sum 
+*/
+
 void reverse_char_array(char arr[], int length);
 void from_base_n(int base, char arr[], int length);
 void to_base_n(int base, int decimal);
@@ -12,7 +19,7 @@ int main() {
     stack base_n;
     int trigger;
     int number;
-    char base_n_string[36];
+    char base_n_string[64];
     int base;
 
     printf("Convert decimal to a new base (1).\n");
@@ -63,27 +70,21 @@ int char_to_int(char c) {
 
 void from_base_n(int base, char arr[], int length) {
     int sum = 0;
-
     int i;
     int pow;
+
     for (i = length - 1, pow = 1; i >= 0; --i, pow *= base) {
         int n = char_to_int(arr[i]);
         sum += pow * n;
     }
 
-    /* 
-    h0 = D -> 13, h1 = 0 -> 0, h2 = 0 -> 0, h3 = F -> 15
-    16^0 * 13,    16^1 * 0,    16^2 * 0     16^3 * 15
-    multiply hex decimal equivilant by its position from the right
-    collect sum 
-    */
     printf("%d", sum);
 }
 
 void to_base_n(int base, int decimal) {
     stack base_n_stack;
-
     int i;
+
     for (i = 0; decimal != 0; ++i) {
         int remainder = decimal % base;
         decimal = decimal / base;
@@ -100,6 +101,7 @@ void reverse_char_array(char arr[], int length) {
     char temp;
     int i;
     int half_length = length / 2;
+
     for (i = 0; i < half_length; ++i) {
         temp = arr[length - 1 - i];
         arr[length - 1 - i] = arr[i];
